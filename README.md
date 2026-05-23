@@ -9,6 +9,16 @@ Find all Parts:
 Query.From(workspace, Query.IsA("Part"))
 ```
 
+Get the first Part found (or nil if none):
+```lua
+local part = Query.First(Query.From(workspace, Query.IsA("Part")))
+```
+
+Get exactly one Part (errors if there's zero or more than one):
+```lua
+local part = Query.One(Query.From(workspace, Query.IsA("Part")))
+```
+
 Find anchored Parts:
 ```lua
 Query.From(workspace, Query.IsA("Part"):And(Query.Prop("Anchored", true)))
