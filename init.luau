@@ -14,7 +14,14 @@
 			Query.Has(...)             — has matching descendants
 			Query.DirectChild(selector) — restrict to direct children of root
 			Query.From(root, selector) — run the query, returns { Instance }
+
+			Query.First(instances)     — get the first result, or nil
+			Query.One(instances)       — get exactly one result, errors otherwise
 	
+			e.g Query.First(Query.From(...)) , Query.One(Query.From(...))
+
+
+
 		Chain methods (refine an existing selector):
 			:And(selector)       — compound (A AND B)
 			:Not(...)            — exclude matches
@@ -220,6 +227,19 @@ end
 -- runs the query against a root instance and returns matching descendants
 function Query.From(root: Instance, selector: Selector): { Instance }
 	return root:QueryDescendants((selector :: any)._expr)
+end
+
+-- get the first result of a query
+
+function Query.First(instances: { Instance })
+	return instances[1]
+end
+
+-- get only one result from a query, error otherwise
+
+function Query.One(instances: { Instance })
+	assert(#instances == 1, `expected 1 instance from query, instead got {#instances} instances`)
+	return instances[1]
 end
 
 -- returns the selector string without running a query
