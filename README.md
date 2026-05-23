@@ -2,17 +2,6 @@
 
 A wrapper around Roblox's `Instance:QueryDescendants()` that lets you build queries from chained method calls instead of having to remember and hand-write selector strings.
 
-```lua
--- instead of this
-local parts = workspace:QueryDescendants('Model.Debris > Part[Anchored = false]')
-
--- you write this
-local parts = Query.From(workspace,
-    Query.IsA("Model"):And(Query.Tag("Debris"))
-        :Child(Query.IsA("Part"):And(Query.Prop("Anchored", false)))
-)
-```
-
 ## Examples
 
 Find all Parts:
