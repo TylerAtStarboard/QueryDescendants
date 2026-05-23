@@ -96,23 +96,27 @@ local Query = {}
 local Selector = {}
 Selector.__index = Selector
 
--- Convert value to string
+local function quoteString(s: string): string
+	return '"' .. s:gsub("\\", "\\\\"):gsub('"', '\\"') .. '"'
+end
+
 local function formatValue(value: boolean | number | string): string
 	local t = type(value)
+
 	if t == "boolean" then
 		return if value then "true" else "false"
 	elseif t == "number" then
 		local n = value :: number
-		if n == math.floor(n) and n == n then -- not nan
+		assert(n == n, "NaN is not a valid QueryDescendants value")
+		assert(n ~= math.huge and n ~= -math.huge, "Infinity is not a valid QueryDescendants value")
+
+		if n == math.floor(n) then
 			return string.format("%d", n)
 		end
+
 		return tostring(n)
 	else
-		local s = value :: string
-		if #s > 0 and string.match(s, "^[%a%d_%-]+$") then -- valid string
-			return s
-		end
-		return '"' .. string.gsub(s, '"', '"') .. '"'
+		return quoteString(value :: string)
 	end
 end
 
